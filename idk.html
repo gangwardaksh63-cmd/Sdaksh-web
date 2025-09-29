@@ -1,0 +1,367 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="utf-8" />
+<meta name="viewport" content="width=device-width,initial-scale=1" />
+<title>Daksh — Link Page</title>
+<style>
+  :root{
+    --glass-bg: rgba(255,255,255,0.06);
+    --glass-border: rgba(255,255,255,0.12);
+    --accent: #ffcc33;
+    --white: #ffffff;
+  }
+  *{box-sizing:border-box}
+  body{
+    margin:0;
+    font-family: "Segoe UI", Roboto, Arial, sans-serif;
+    color:var(--white);
+    background: radial-gradient(ellipse at center, rgba(255,100,0,0.08) 0%, rgba(0,0,0,0.8) 50%),
+                linear-gradient(180deg,#0b0710 0%, #12060a 60%);
+    min-height:100vh;
+    overflow-x:hidden;
+    position: relative;
+  }
+
+  /* animated subtle nebula overlay */
+  body::before, body::after{
+    content:"";
+    position:fixed;
+    inset:0;
+    pointer-events:none;
+    mix-blend-mode:screen;
+    opacity:0.6;
+    background-image:
+      radial-gradient(circle at 10% 20%, rgba(255,180,0,0.08), transparent 10%),
+      radial-gradient(circle at 85% 70%, rgba(255,40,0,0.06), transparent 12%),
+      radial-gradient(circle at 60% 30%, rgba(255,200,80,0.03), transparent 8%);
+    animation: movebg 20s linear infinite;
+  }
+  @keyframes movebg{
+    0%{ transform: translateY(0) scale(1) }
+    50%{ transform: translateY(-30px) scale(1.02) }
+    100%{ transform: translateY(0) scale(1) }
+  }
+
+  .gold-snow {
+    pointer-events:none;
+    position:fixed;
+    inset:0;
+    z-index:10;
+    overflow:hidden;
+  }
+  .snowflake {
+    position: absolute;
+    top:-10px;
+    width: 6px;
+    height: 6px;
+    background: radial-gradient(circle, rgba(255,215,0,0.9) 0%, rgba(255,180,40,0.5) 80%);
+    border-radius: 50%;
+    opacity:0.8;
+    animation-name: fall;
+    animation-timing-function: linear;
+    animation-iteration-count: infinite;
+  }
+  @keyframes fall {
+    0% { transform: translateY(0) translateX(0); opacity:0.8; }
+    100% { transform: translateY(110vh) translateX(20px); opacity:0.1; }
+  }
+
+  .container{
+    max-width:920px;
+    margin:40px auto;
+    padding:28px;
+    position:relative;
+    z-index:20; /* above snow */
+  }
+
+  .card, .about-card {
+    background: linear-gradient(180deg, rgba(255,255,255,0.03), rgba(255,255,255,0.02));
+    border: 1px solid rgba(255,255,255,0.06);
+    border-radius:18px;
+    padding:24px;
+    backdrop-filter: blur(6px);
+    box-shadow: 0 8px 30px rgba(0,0,0,0.6), inset 0 1px 0 rgba(255,255,255,0.02);
+    margin-bottom:20px;
+  }
+
+  .top-row{
+    display:flex;
+    gap:18px;
+    align-items:center;
+  }
+
+  .avatar {
+    width:96px;
+    height:96px;
+    border-radius:50%;
+    overflow:hidden;
+    flex:0 0 96px;
+    border: 3px solid rgba(255,255,255,0.08);
+    box-shadow: 0 6px 20px rgba(0,0,0,0.6), 0 0 18px rgba(255,200,80,0.06);
+  }
+  .avatar img{ width:100%; height:100%; object-fit:cover; display:block; }
+
+  .profile-info {
+    flex:1;
+    min-width:0;
+  }
+  .profile-name {
+    font-size:1.8rem;
+    font-weight:700;
+    letter-spacing:0.6px;
+    margin:8px 0;
+    color:var(--white);
+    text-shadow: 0 0 12px rgba(255,200,80,0.14);
+  }
+  .profile-sub{
+    color: rgba(255,255,255,0.65);
+    font-size:0.95rem;
+    margin-top:6px;
+  }
+
+  .music-toggle{
+    position: absolute;
+    left:22px;
+    top:20px;
+    width:44px;
+    height:44px;
+    border-radius:50%;
+    border:none;
+    display:flex;
+    align-items:center;
+    justify-content:center;
+    background:var(--white);
+    color:black;
+    cursor:pointer;
+    box-shadow: 0 6px 20px rgba(0,0,0,0.5);
+    font-size:1.05rem;
+  }
+
+  .links {
+    margin-top:20px;
+    display:flex;
+    flex-direction:column;
+    gap:14px;
+  }
+
+  .link-item{
+    display:flex;
+    gap:14px;
+    align-items:center;
+    padding:14px;
+    border-radius:14px;
+    background: var(--glass-bg);
+    border:1px solid var(--glass-border);
+    transition: transform .18s ease, box-shadow .18s ease;
+    text-decoration:none;
+    color:var(--white);
+    box-shadow: 0 6px 18px rgba(0,0,0,0.55);
+    position: relative;
+    overflow: hidden;
+  }
+  .link-item:hover{
+    transform: translateY(-6px);
+    box-shadow: 0 18px 50px rgba(0,0,0,0.65), 0 0 28px rgba(255,180,0,0.06);
+  }
+
+  .link-item::before {
+    content: "";
+    position: absolute;
+    left: -100%;
+    top: 0;
+    height: 100%;
+    width: 6px;
+    background: linear-gradient(to bottom, rgba(255,200,80,0.8), rgba(255,180,40,0.6));
+    transition: left 0.35s ease;
+    border-radius: 3px;
+    pointer-events: none;
+  }
+  .link-item.active::before { left: 0; }
+
+  .link-item::after {
+    content: "";
+    position: absolute;
+    top: 0;
+    left: 0;
+    height: 100%;
+    width: 100%;
+    pointer-events: none;
+    border-radius: 14px;
+    box-shadow: 0 0 0 rgba(255,200,80,0.8);
+    transition: box-shadow 0.3s ease;
+  }
+  .link-item.glow::after {
+    box-shadow: 0 0 25px 4px rgba(255,200,80,0.8), 0 0 25px 4px rgba(255,180,40,0.6) inset;
+  }
+
+  .link-thumb{
+    width:72px;
+    height:72px;
+    border-radius:12px;
+    overflow:hidden;
+    flex:0 0 72px;
+    border:1px solid rgba(255,255,255,0.04);
+  }
+  .link-thumb img{width:100%;height:100%;object-fit:cover;display:block}
+
+  .link-body{
+    flex:1;
+    min-width:0;
+  }
+  .link-title{
+    font-size:1.05rem;
+    font-weight:700;
+    margin-bottom:6px;
+  }
+  .link-meta{
+    font-size:0.9rem;
+    color: rgba(255,255,255,0.7);
+  }
+  .link-action{
+    margin-left:auto;
+    display:flex;
+    align-items:center;
+    gap:10px;
+  }
+  .btn-view{
+    background:transparent;
+    border:1px solid rgba(255,255,255,0.14);
+    padding:8px 12px;
+    border-radius:999px;
+    color:var(--white);
+    font-weight:600;
+    text-decoration:none;
+    cursor:pointer;
+  }
+  .btn-join{
+    background:var(--accent);
+    color:#111;
+    padding:8px 12px;
+    border-radius:999px;
+    font-weight:700;
+    text-decoration:none;
+    box-shadow: 0 6px 18px rgba(255,200,80,0.12);
+    cursor:pointer;
+  }
+
+  .about-card {
+    font-size:0.95rem;
+    line-height:1.55rem;
+    color: rgba(255,255,255,0.85);
+    text-shadow: 0 0 6px rgba(255,180,0,0.08);
+  }
+
+  .views {
+    position:fixed;
+    left:18px;
+    bottom:18px;
+    background: rgba(0,0,0,0.45);
+    padding:10px 14px;
+    border-radius:12px;
+    border:1px solid rgba(255,255,255,0.04);
+    color:rgba(255,255,255,0.9);
+    font-weight:700;
+    backdrop-filter: blur(4px);
+  }
+
+  @media (max-width:640px){
+    .container{ padding:18px }
+    .avatar{ width:84px; height:84px; flex:0 0 84px }
+    .link-thumb{ width:62px; height:62px; flex:0 0 62px }
+    .profile-name{ font-size:1.5rem }
+  }
+</style>
+</head>
+<body>
+  <!-- Golden Snow -->
+  <div class="gold-snow" id="goldSnow"></div>
+
+  <div class="container">
+    <div style="position:relative">
+      <button id="musicBtn" class="music-toggle" aria-label="Toggle music">🔊</button>
+
+      <div class="card">
+        <div class="top-row">
+          <div class="avatar">
+            <img src="https://i.ibb.co/CKxWWWbD/20250925-211400.png" alt="profile">
+          </div>
+          <div class="profile-info">
+            <div class="profile-name">Daksh ░ Gangwar</div>
+            <div class="profile-sub">An great Minecraft funny content creator • programmer • GFX/VFX artist</div>
+          </div>
+        </div>
+
+        <div class="links" id="linksList">
+          <a class="link-item" href="https://youtube.com/@snapcut69" target="_blank" rel="noopener">
+            <div class="link-thumb"><img src="https://i.ibb.co/xtVGx53C/image-1.png" alt="YouTube"></div>
+            <div class="link-body">
+              <div class="link-title">YouTube</div>
+              <div class="link-meta">Subscribe for vids & edits</div>
+            </div>
+            <div class="link-action"><span class="btn-view">View</span></div>
+          </a>
+          <a class="link-item" href="https://open.spotify.com/user/31jfhudpu32rbgnzhm3halbhal4u" target="_blank" rel="noopener">
+            <div class="link-thumb"><img src="https://i.ibb.co/CKxWWWbD/20250925-211400.png" alt="Spotify"></div>
+            <div class="link-body">
+              <div class="link-title">Spotify</div>
+              <div class="link-meta">Vibe playlists • chill tracks</div>
+            </div>
+            <div class="link-action"><span class="btn-view">Open</span></div>
+          </a>
+          <a class="link-item" href="https://discord.gg/bwvSAmxPvx" target="_blank" rel="noopener">
+            <div class="link-thumb"><img src="https://i.ibb.co/FLdHwh3g/images.jpg" alt="Discord"></div>
+            <div class="link-body">
+              <div class="link-title">Discord</div>
+              <div class="link-meta">Join server • hangout with the gang</div>
+            </div>
+            <div class="link-action"><span class="btn-join">Join</span></div>
+          </a>
+        </div>
+      </div>
+
+      <div class="about-card card">
+        <strong>About Daksh</strong> <br><br>
+        An great Minecraft funny content creator, great programmer and GFX/VFX artist.<br>
+        He is very intelligent person, he is so handsome, good looking, rich and has a great heart ❤.<br>
+        He has aesthetic body. Girls can talk to me any time.<br>
+        Gmail: <a href="mailto:dakshgangwar590@gmail.com" style="color: var(--accent); text-decoration:none;">dakshgangwar590@gmail.com</a>.<br>
+        Ty ❤
+      </div>
+    </div>
+  </div>
+
+  <div class="views">👁️ 12 views</div>
+
+  <audio id="bgAudio" loop>
+    <source src="https://www.soundhelix.com/examples/mp3/SoundHelix-Song-1.mp3" type="audio/mpeg">
+  </audio>
+
+<script>
+  const audio = document.getElementById('bgAudio');
+  audio.volume = 0.22;
+  audio.play().catch(()=>{});
+
+  const musicBtn = document.getElementById('musicBtn');
+  function updateBtn(){
+    if(audio.paused){ musicBtn.textContent = '🔇'; musicBtn.title='Play music'; }
+    else{ musicBtn.textContent = '🔊'; musicBtn.title='Mute music'; }
+  }
+  musicBtn.addEventListener('click', ()=>{ audio.paused ? audio.play().catch(()=>{}) : audio.pause(); updateBtn(); });
+  updateBtn();
+
+  // golden glow effect on button click
+  document.querySelectorAll('.link-action span').forEach(btn=>{
+    btn.addEventListener('click', e=>{
+      e.preventDefault();
+      const parentLink = btn.closest('.link-item');
+      parentLink.classList.add('glow');
+      setTimeout(()=> parentLink.classList.remove('glow'),700);
+      const href = parentLink.getAttribute('href');
+      setTimeout(()=> window.open(href, "_blank"),200);
+    });
+  });
+
+  // create golden snow
+  const snowContainer = document.getElementById('goldSnow');
+  const snowCount
